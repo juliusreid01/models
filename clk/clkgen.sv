@@ -7,22 +7,22 @@
 //     Clock generator module used for testbenches
 //
 // Notes:
+//     This module was written and simulated to work with Icarus Verilog
+//     iverilog -g2012
 // 
 ////////////////////////////////////////////////////////////////////////////////
 module clkgen #(parameter PERIOD=8)
-(output clk);  // output clock
+(output reg clk);  // output clock
 
-logic clkreg;  // clock register
 logic en;      // clock enable signal
 
-assign clk = en ? clkreg : 1'bz;
-
 initial begin
-   clkreg = 1'bz;
-
-   forever 
-      clkreg = #PERIOD ~clkreg;
+   en  = 1'b0;
+   clk = 1'bz;
 end
+
+always 
+   #PERIOD clk = en ? !clk : 1'b0;
 
 task start;
   en = 1'b1;
